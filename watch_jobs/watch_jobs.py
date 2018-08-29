@@ -11,8 +11,8 @@ import os
 ##########################################################################
 parser = ap.ArgumentParser(
     description=("""Check progress of optimization jobs and if desired
-                 already make plots based on preliminary data """)
-    , formatter_class=ap.ArgumentDefaultsHelpFormatter)
+                 already make plots based on preliminary data """),
+    formatter_class=ap.ArgumentDefaultsHelpFormatter)
 parser.add_argument('-plots', dest='plots', action='store_true',
                     help='make plots based on preliminary data')
 # TODO: think about plotting jobs with different dt's or number of profiles used...
@@ -51,7 +51,7 @@ def main():
                 plt_cmd = sp.Popen(['python', 'DF_fitting.py', '-p', txt, '-ana'],
                                    cwd=os.getcwd()+'/temp/', stdin=sp.PIPE)
                 # NOTE: asssuming all profiles have been fitted ...
-                plt_cmd.communicate(input='%i\nall\n1' % args.dt)
+                plt_cmd.communicate(input=b'%i\nall\n1' % args.dt)
                 # copy plots made to correct directory
                 sp.call(['cp', '-r', os.getcwd()+'/temp/results', d+'/results'],
                         cwd=os.getcwd())
