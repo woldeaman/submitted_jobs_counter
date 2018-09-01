@@ -3,6 +3,7 @@
 import subprocess as sp
 import pandas as pd
 import argparse as ap
+import numpy as np
 import glob
 import os
 
@@ -68,11 +69,45 @@ def make_plots(directories):
             sp.call(['rm', '-r', os.getcwd()+'/temp'], cwd=os.getcwd())
 
 
+def combine_runs(directories, sep='_'):
+    """
+    Combine runs of same setup in different directories into one directory.
+
+    sep     -   character separating identical setups
+    """
+    # find unique optimization setups
+    setups = np.unique([sep.join(d.split('/')[-1].split('%s' % sep)[:-1])
+                        for d in directories])
+    prefix = '/'.join(directories[0].split('/')[:-1])  # path to cwd
+    for s in setups:
+        jobs = glob.glob('/'.join([prefix, s])+'*')  # all subdirectories with suffixes
+        # create final directory for combination
+        combi_dir = sep.join(jobs[0].split(sep)[:-1])
+        sp.call(['cp', '-r', jobs[0], combi_dir], cwd=os.getcwd())
+        sp.call(['rm', '-r', 'results.h5', 'results'], cwd=combi_dir)
+
+
+        results_combi = []  # combine storages
+        for j in jobs:
+            contents = glob.glob(j+'/*')
+            # only look at directories with results.h5 files in them
+            if 'results.h5' in ''.join(contents).split('/'):
+                # TODO: here read now storages and write everything to combined storage...
+                # maybe also print total number of runs
+
+
+
+
+##########################################################################
+
+###############
+#  FUNCTIONS  #
+##########################################################################
 def main():
     # find all sub-directories of current directory
     dirs = glob.glob(os.getcwd()+'/*')
     # count number of completed iterations
-    found_results = check_iterations(dirs)
+    check_iterations(dirs)
 
     # combine results if found
     if args.combine and found_results:
@@ -85,6 +120,7 @@ def main():
 
     if not found_results:
         print("No 'results.h5' file was found in sub-directories...")
+##########################################################################
 
 
 if __name__ == "__main__":
