@@ -21,6 +21,8 @@ parser.add_argument('-combine', dest='combine', action='store_true',
 # TODO: think about plotting jobs with different dt's or number of profiles used...
 parser.add_argument('-dt', dest='dt', type=int, default=10,
                     help='temporal discretization used for optimization')
+parser.add_argument('-sep', dest='sep', type=str, default='_',
+                    help='separator for subjobs.')
 # parsing command line flags
 args = parser.parse_args()
 ##########################################################################
@@ -86,19 +88,23 @@ def combine_runs(directories, sep='_'):
         sp.call(['cp', '-r', jobs[0], combi_dir], cwd=os.getcwd())
         sp.call(['rm', '-r', 'results.h5', 'results'], cwd=combi_dir)
 
-
-        results_combi = []  # combine storages
-        for j in jobs:
-            contents = glob.glob(j+'/*')
-            # only look at directories with results.h5 files in them
-            if 'results.h5' in ''.join(contents).split('/'):
-                # TODO: here read now storages and write everything to combined storage...
-                # maybe also print total number of runs
-
-
+        # write everything into combined storage
+        with pd.HDFStore(combi_dir+'/results.h5', complevel=9) as res_combi:
+            batch = 0
+            for j in jobs:
+                contents = glob.glob(j+'/*')
+                # only look at directories with results.h5 files in them
+                if 'results.h5' in ''.join(contents).split('/'):
+                    res_job = pd.HDFStore(j+'/results.h5', 'r')
 
 
+                    batch += 1  # next batch to work on
+
+    # from now on only work on new combined directories
+    combined_dirs = ['/'.join(prefix+s) for s in setups]
+    return combined_dirs
 ##########################################################################
+
 
 ###############
 #  FUNCTIONS  #
@@ -111,7 +117,9 @@ def main():
 
     # combine results if found
     if args.combine and found_results:
-        # TODO: write function combining all runs into one directory...
+        # now only work on combined results directories
+        dirs = combine_runs(dirs, sep='_')
+        args.plot = True  # also make plots when combining results
 
     # only make plots if results were found
     if args.plots and found_results:
