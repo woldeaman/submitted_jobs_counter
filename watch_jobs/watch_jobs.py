@@ -43,7 +43,7 @@ def check_iterations(directories):
         # only look at directories with results.h5 files in them
         contents = glob.glob(d+'/*')
         if 'results.h5' in ''.join(contents).split('/'):
-            global found_results
+            global found_results  # apparently found some results
             found_results = True
             sp.call(['cp', d+'/results.h5', '.'], cwd=os.getcwd())
             res = pd.HDFStore('results.h5')
@@ -82,6 +82,7 @@ def combine_runs(directories, sep='_'):
                         for d in directories])
     prefix = '/'.join(directories[0].split('/')[:-1])  # path to cwd
     for s in setups:
+        print('Currently gathering runs for %s...' % s)
         jobs = glob.glob('/'.join([prefix, s])+'*')  # all subdirectories with suffixes
         # create final directory for combination
         combi_dir = sep.join(jobs[0].split(sep)[:-1])
@@ -95,6 +96,8 @@ def combine_runs(directories, sep='_'):
                 iter = 1  # start with run 1
                 # only look at directories with results.h5 files in them
                 if 'results.h5' in ''.join(contents).split('/'):
+                    global found_results  # apparently found some results
+                    found_results = True
                     res_job = pd.HDFStore(j+'/results.h5', 'r')
                     for run in list(res_job.root._v_children.keys()):
                         res_combi['r%i' % iter] = res_job[run]  # copy current run
@@ -115,14 +118,15 @@ def combine_runs(directories, sep='_'):
 def main():
     # find all sub-directories of current directory
     dirs = glob.glob(os.getcwd()+'/*')
+
+    # first combine results
+    if args.combine:
+        print("Combining different jobs...")
+        dirs = combine_runs(dirs, sep='_')   # now only work on combined results directories
+        args.plot = True  # also make plots when combining results
+
     # count number of completed iterations
     check_iterations(dirs)
-
-    # combine results if found
-    if args.combine and found_results:
-        # now only work on combined results directories
-        dirs = combine_runs(dirs, sep='_')
-        args.plot = True  # also make plots when combining results
 
     # only make plots if results were found
     if args.plots and found_results:
