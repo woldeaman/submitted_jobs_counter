@@ -91,9 +91,9 @@ def combine_runs(directories, sep='_'):
 
         # write everything into combined storage
         with pd.HDFStore(combi_dir+'/results.h5', complevel=9) as res_combi:
+            iter = 1  # start with run 1
             for j in jobs:
                 contents = glob.glob(j+'/*')
-                iter = 1  # start with run 1
                 # only look at directories with results.h5 files in them
                 if 'results.h5' in ''.join(contents).split('/'):
                     global found_results  # apparently found some results
@@ -108,7 +108,7 @@ def combine_runs(directories, sep='_'):
                     res_job.close()  # closing opened store
 
     # from now on only work on new combined directories
-    combined_dirs = ['/'.join(prefix+s) for s in setups]
+    combined_dirs = ['/'.join([prefix, s]) for s in setups]
     return combined_dirs
 ##########################################################################
 
