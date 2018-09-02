@@ -90,15 +90,18 @@ def combine_runs(directories, sep='_'):
 
         # write everything into combined storage
         with pd.HDFStore(combi_dir+'/results.h5', complevel=9) as res_combi:
-            batch = 0
             for j in jobs:
                 contents = glob.glob(j+'/*')
+                iter = 1  # start with run 1
                 # only look at directories with results.h5 files in them
                 if 'results.h5' in ''.join(contents).split('/'):
                     res_job = pd.HDFStore(j+'/results.h5', 'r')
-
-
-                    batch += 1  # next batch to work on
+                    for run in list(res_job.root._v_children.keys()):
+                        res_combi['r%i' % iter] = res_job[run]  # copy current run
+                        for sub in ['active_mask', 'fun', 'grad', 'jac', 'x']:
+                            # copy sub directories
+                            res_combi['r%i/%s' % (iter, sub)] = res_job[run]
+                        iter += 1  # count to next run
 
     # from now on only work on new combined directories
     combined_dirs = ['/'.join(prefix+s) for s in setups]
