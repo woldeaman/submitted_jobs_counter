@@ -124,7 +124,7 @@ def main():
     if args.combine:
         print("Combining different jobs...\n")
         dirs = combine_runs(dirs, sep='_')   # now only work on combined results directories
-        args.plot = True  # also make plots when combining results
+        args.plots = True  # also make plots when combining results
 
     # count number of completed iterations
     check_iterations(dirs)
