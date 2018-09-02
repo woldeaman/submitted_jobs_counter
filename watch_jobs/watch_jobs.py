@@ -121,7 +121,7 @@ def main():
 
     # first combine results
     if args.combine:
-        print("Combining different jobs...")
+        print("Combining different jobs...\n")
         dirs = combine_runs(dirs, sep='_')   # now only work on combined results directories
         args.plot = True  # also make plots when combining results
 
@@ -130,11 +130,11 @@ def main():
 
     # only make plots if results were found
     if args.plots and found_results:
-        print("Now making plots...")
+        print("\nNow making plots...")
         make_plots(dirs)
 
     if not found_results:
-        print("No 'results.h5' file was found in sub-directories...")
+        print("\nNo 'results.h5' file was found in sub-directories...")
 ##########################################################################
 
 
