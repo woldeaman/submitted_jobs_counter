@@ -105,6 +105,7 @@ def combine_runs(directories, sep='_'):
                             # copy sub directories
                             res_combi['r%i/%s' % (iter, sub)] = res_job[run]
                         iter += 1  # count to next run
+                    res_job.close()  # closing opened store
 
     # from now on only work on new combined directories
     combined_dirs = ['/'.join(prefix+s) for s in setups]
