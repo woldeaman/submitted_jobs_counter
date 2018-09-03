@@ -103,7 +103,7 @@ def combine_runs(directories, sep='_'):
                         res_combi['r%i' % iter] = res_job[run]  # copy current run
                         for sub in ['active_mask', 'fun', 'grad', 'jac', 'x']:
                             # copy sub directories
-                            res_combi['r%i/%s' % (iter, sub)] = res_job[run]
+                            res_combi['r%i/%s' % (iter, sub)] = res_job[run+"/%s" % sub]
                         iter += 1  # count to next run
                     res_job.close()  # closing opened store
 
