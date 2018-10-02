@@ -82,7 +82,6 @@ def combine_runs(directories, sep='_'):
                         for d in directories])
     prefix = '/'.join(directories[0].split('/')[:-1])  # path to cwd
     for s in setups:
-        print('Currently gathering runs for %s...' % s)
         jobs = glob.glob('/'.join([prefix, s])+'*')  # all subdirectories with suffixes
         # create final directory for combination
         combi_dir = sep.join(jobs[0].split(sep)[:-1])
@@ -93,6 +92,7 @@ def combine_runs(directories, sep='_'):
         with pd.HDFStore(combi_dir+'/results.h5', complevel=9) as res_combi:
             iter = 1  # start with run 1
             for j in jobs:
+                print('Currently gathering runs from %s...' % j)
                 contents = glob.glob(j+'/*')
                 # only look at directories with results.h5 files in them
                 if 'results.h5' in ''.join(contents).split('/'):
@@ -103,7 +103,7 @@ def combine_runs(directories, sep='_'):
                         res_combi['r%i' % iter] = res_job[run]  # copy current run
                         for sub in ['active_mask', 'fun', 'grad', 'jac', 'x']:
                             # copy sub directories
-                            res_combi['r%i/%s' % (iter, sub)] = res_job[run+"/%s" % sub]
+                            res_combi['r%i/%s' % (iter, sub)] = res_job["%s/%s" % (run, sub)]
                         iter += 1  # count to next run
                     res_job.close()  # closing opened store
 
