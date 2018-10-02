@@ -92,7 +92,7 @@ def combine_runs(directories, sep='_'):
         with pd.HDFStore(combi_dir+'/results.h5', complevel=9) as res_combi:
             iter = 1  # start with run 1
             for j in jobs:
-                print('Currently gathering runs from %s...' % j)
+                print('Currently gathering runs from %s...' % j.split('/')[-1])
                 contents = glob.glob(j+'/*')
                 # only look at directories with results.h5 files in them
                 if 'results.h5' in ''.join(contents).split('/'):
