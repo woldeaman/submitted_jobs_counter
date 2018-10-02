@@ -100,6 +100,7 @@ def combine_runs(directories, sep='_'):
                     found_results = True
                     res_job = pd.HDFStore(j+'/results.h5', 'r')
                     for run in list(res_job.root._v_children.keys()):
+                        print('At run %s' % run, end='', flush=True)
                         res_combi['r%i' % iter] = res_job[run]  # copy current run
                         for sub in ['active_mask', 'fun', 'grad', 'jac', 'x']:
                             # copy sub directories
