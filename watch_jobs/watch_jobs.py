@@ -102,7 +102,7 @@ def combine_runs(directories, sep='_'):
                     for run in list(res_job.root._v_children.keys()):
                         res_combi['r%i' % iter] = res_job[run]  # copy current run
                         for sub in ['active_mask', 'fun', 'grad', 'jac', 'x']:
-                            print('Copying run %s/%s' % (run, sub), end='\r', flush=True)
+                            print('Copying run {:>4}/{:12}'.format(run, sub), end='\r', flush=True)
                             # copy sub directories
                             res_combi['r%i/%s' % (iter, sub)] = res_job["%s/%s" % (run, sub)]
                         iter += 1  # count to next run
