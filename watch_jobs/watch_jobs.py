@@ -95,6 +95,9 @@ def combine_runs(directories, sep='_'):
                 print('Currently gathering runs from %s...' % j.split('/')[-1])
                 contents = glob.glob(j+'/*')
                 # only look at directories with results.h5 files in them
+
+                # TODO: built in check that takes care of corrupt hdf stores
+                # and skip to next job run
                 if 'results.h5' in ''.join(contents).split('/'):
                     global found_results  # apparently found some results
                     found_results = True
