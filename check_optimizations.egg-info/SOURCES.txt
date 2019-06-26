@@ -1,0 +1,10 @@
+README.txt
+setup.py
+check_optimizations.egg-info/PKG-INFO
+check_optimizations.egg-info/SOURCES.txt
+check_optimizations.egg-info/dependency_links.txt
+check_optimizations.egg-info/entry_points.txt
+check_optimizations.egg-info/not-zip-safe
+check_optimizations.egg-info/requires.txt
+check_optimizations.egg-info/top_level.txt
+watch_jobs/watch_jobs.py

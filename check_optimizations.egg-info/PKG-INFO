@@ -1,0 +1,11 @@
+Metadata-Version: 1.1
+Name: check-optimizations
+Version: 0.1
+Summary: Checking current process of optimization jobs.
+Home-page: UNKNOWN
+Author: Amanuel Wolde-Kidan
+Author-email: amanuel.wolde-kidan@fu-berlin.de
+License: MIT
+Description: UNKNOWN
+Platform: UNKNOWN
+Requires: pandas (>=0.22)

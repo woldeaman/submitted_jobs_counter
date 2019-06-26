@@ -61,7 +61,7 @@ def make_plots(directories):
             sp.call(['cp', '-r', d, 'temp'], cwd=os.getcwd())
             # assume .txt file contains profile data
             txt = glob.glob(os.getcwd()+'/temp/*.txt')[0]  # NOTE: assuming only one .txt file...
-            plt_cmd = sp.Popen(['python', 'DF_fitting.py', '-p', txt, '-ana'],
+            plt_cmd = sp.Popen(['DF_fitting', '-p', txt, '-ana'],
                                cwd=os.getcwd()+'/temp/', stdin=sp.PIPE)
             # NOTE: asssuming all profiles have been fitted ...
             plt_cmd.communicate(input=b'%i\nall\n1' % args.dt)

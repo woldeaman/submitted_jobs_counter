@@ -1,0 +1,3 @@
+[console_scripts]
+check_optimizations = watch_jobs.watch_jobs:main
+
